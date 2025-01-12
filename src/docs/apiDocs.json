@@ -1,0 +1,491 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Sampahin: Waste Management API",
+        "version": "1.0.0",
+        "description": "API for predicting waste classification based on uploaded images and retrieving waste history."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000",
+            "description": "Development server"
+        }
+    ],
+    "paths": {
+        "/predict": {
+            "post": {
+                "summary": "Predict Waste Classification",
+                "description": "Uploads an image and predicts the waste classification.",
+                "operationId": "postPredictData",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "image"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful prediction",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "string",
+                                            "description": "The classification result of the waste."
+                                        },
+                                        "explanation": {
+                                            "type": "string",
+                                            "description": "Explanation of the classification result."
+                                        },
+                                        "confidenceScore": {
+                                            "type": "number",
+                                            "description": "Confidence score of the prediction."
+                                        },
+                                        "imageUrl": {
+                                            "type": "string",
+                                            "format": "uri",
+                                            "description": "URL of the uploaded image."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid image format or missing image",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message describing what went wrong."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Model not loaded or database error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating server issues."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/histories": {
+            "get": {
+                "summary": "Get All Wastes",
+                "description": "Retrieves all waste records.",
+                "operationId": "getAllWastes",
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of all wastes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "Unique identifier for the waste record"
+                                            },
+                                            "result": {
+                                                "type": "string",
+                                                "description": "Classification result of the waste"
+                                            },
+                                            "explanation": {
+                                                "type": "string",
+                                                "description": "Explanation of the classification"
+                                            },
+                                            "confidenceScore": {
+                                                "type": "number",
+                                                "description": "Confidence score of the classification"
+                                            },
+                                            "imageUrl": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "description": "URL of the associated image"
+                                            },
+                                            "createdAt": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "description": "Date and time when the record was created"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "description": "Date and time when the record was last updated"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Error fetching wastes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating server issues."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "histories/{id}": {
+            "get": {
+                "summary": "Get Waste by ID",
+                "description": "Retrieves a single waste record by its unique identifier.",
+                "operationId": "getWasteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "The unique identifier for the waste record."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of waste by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "description": "Unique identifier for the waste record"
+                                        },
+                                        "result": {
+                                            "type": "string",
+                                            "description": "Classification result of the waste"
+                                        },
+                                        "explanation": {
+                                            "type": "string",
+                                            "description": "Explanation of the classification"
+                                        },
+                                        "confidenceScore": {
+                                            "type": "number",
+                                            "description": "Confidence score of the classification"
+                                        },
+                                        "imageUrl": {
+                                            "type": "string",
+                                            "format": "uri",
+                                            "description": "URL of the associated image"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/histories/category/{category}": {
+            "get": {
+                "summary": "Get Wastes by Category",
+                "description": "Retrieves waste records filtered by a specific category.",
+                "operationId": "getWasteByCategory",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The category to filter wastes by."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of wastes by category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "Unique identifier for the waste record"
+                                            },
+                                            "result": {
+                                                "type": "string",
+                                                "description": "Classification result of the waste"
+                                            },
+                                            "explanation": {
+                                                "type": "string",
+                                                "description": "Explanation of the classification"
+                                            },
+                                            "confidenceScore": {
+                                                "type": "number",
+                                                "description": "Confidence score of the classification"
+                                            },
+                                            "imageUrl": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "description": "URL of the associated image"
+                                            },
+                                            "createdAt": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "description": "Date and time when the record was created"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "description": "Date and time when the record was last updated"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No wastes found for this category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating no records found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Error fetching wastes by category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating server issues."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/histories/{id}": {
+            "get": {
+                "summary": "Get Waste by ID",
+                "description": "Retrieves a single waste record by its unique identifier.",
+                "operationId": "getWasteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "The unique identifier for the waste record."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of waste record",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "description": "Unique identifier for the waste record"
+                                        },
+                                        "result": {
+                                            "type": "string",
+                                            "description": "Classification result of the waste"
+                                        },
+                                        "explanation": {
+                                            "type": "string",
+                                            "description": "Explanation of the classification"
+                                        },
+                                        "confidenceScore": {
+                                            "type": "number",
+                                            "description": "Confidence score of the classification"
+                                        },
+                                        "imageUrl": {
+                                            "type": "string",
+                                            "format": "uri",
+                                            "description": "URL of the associated image"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "description": "Date and time when the record was created"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "description": "Date and time when the record was last updated"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Waste not found for this ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating no records found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Error fetching waste by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating server issues."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/histories/{id}": {
+            "delete": {
+                "summary": "Delete Waste Record",
+                "description": "Deletes a waste record by its unique identifier.",
+                "operationId": "deleteWaste",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "The unique identifier for the waste record."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful deletion of waste record",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Success message indicating deletion."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Waste not found for this ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating no records found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Error deleting waste",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message indicating server issues."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {}
+}
