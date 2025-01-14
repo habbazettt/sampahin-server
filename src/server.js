@@ -12,7 +12,7 @@ const historyRoute = require('./routes/history.routes');
 const app = express()
 
 app.use(cors({
-    origin: ['https://sampahin.netlify.app', 'http://localhost:5177'],
+    origin: ['https://sampahin.netlify.app'],
 }));
 
 
