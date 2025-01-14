@@ -5,7 +5,7 @@ const storage = new Storage({
     credentials: {
         type: "service_account",
         project_id: "sampahin-446009",
-        private_key_id: "25a5d6cc04be1c7a3b17a9cf26332d7177559d15",
+        private_key_id: process.env.PRIVATE_KEY_ID,
         private_key: process.env.PRIVATE_KEY,
         client_email: "sampahin-service@sampahin-446009.iam.gserviceaccount.com",
         client_id: "108470377024734410635",
