@@ -9,6 +9,10 @@
         {
             "url": "http://localhost:5000",
             "description": "Development server"
+        },
+        {
+            "url": "https://sampahin-server-762723834553.asia-southeast2.run.app",
+            "description": "Production server"
         }
     ],
     "paths": {
