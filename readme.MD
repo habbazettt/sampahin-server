@@ -2,7 +2,7 @@
 
 # Sampahin API
 
-**BASE_URL** : `http://localhost:5000`
+**BASE_URL** : `https://sampahin-server-762723834553.asia-southeast2.run.app`
 
 ## About Project
 
@@ -32,7 +32,7 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 ## API Docummentation
 
-Read the API Docs [here](http://localhost:5000/api-docs)
+Read the API Docs [here](https://sampahin-server-762723834553.asia-southeast2.run.app/api-docs)
 
 ## Contributors
 
